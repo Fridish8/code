@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krypteringsverktyg</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        textarea { width: 100%; height: 100px; }
+        button { margin-top: 10px; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Krypteringsverktyg</h2>
+    <textarea id="textInput" placeholder="Skriv din text här..."></textarea><br>
+    <input type="password" id="password" placeholder="Lösenord"><br>
+    <button onclick="encryptText()">Kryptera</button>
+    <button onclick="decryptText()">Dekryptera</button>
+    <h3>Resultat:</h3>
+    <textarea id="output" readonly></textarea>
+
+    <script>
+        function encryptText() {
+            let text = document.getElementById("textInput").value;
+            let password = document.getElementById("password").value;
+            if (!text || !password) { alert("Fyll i både text och lösenord!"); return; }
+            let encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(text), password).toString();
+            document.getElementById("output").value = encrypted;
+        }
+
+        function decryptText() {
+            let encryptedText = document.getElementById("output").value;
+            let password = document.getElementById("password").value;
+            if (!encryptedText || !password) { alert("Fyll i både krypterad text och lösenord!"); return; }
+            try {
+                let bytes = CryptoJS.AES.decrypt(encryptedText, password);
+                let decrypted = bytes.toString(CryptoJS.enc.Utf8);
+                if (!decrypted) throw new Error("Fel lösenord!");
+                document.getElementById("output").value = decrypted;
+            } catch (e) {
+                alert("Fel lösenord eller ogiltig krypterad text!");
+            }
+        }
+    </script>
+</body>
+</html>
