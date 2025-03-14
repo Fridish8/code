@@ -6,32 +6,65 @@
     <title>Krypteringsverktyg</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-        textarea { width: 100%; height: 100px; }
-        button { margin-top: 10px; padding: 10px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            margin: 50px; 
+            background-color: #f4f4f4; 
+        }
+        .container {
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 48%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .encrypt-btn { background-color: #28a745; color: white; }
+        .decrypt-btn { background-color: #dc3545; color: white; }
+        button:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
-    <h2>Krypteringsverktyg</h2>
-    <textarea id="textInput" placeholder="Skriv din text här..."></textarea><br>
-    <input type="password" id="password" placeholder="Lösenord"><br>
-    <button onclick="encryptText()">Kryptera</button>
-    <button onclick="decryptText()">Dekryptera</button>
-    <h3>Resultat:</h3>
-    <textarea id="output" readonly></textarea>
-
+    <div class="container">
+        <h2>Krypteringsverktyg</h2>
+        <textarea id="textInput" placeholder="Skriv din text här..."></textarea>
+        <input type="password" id="password" placeholder="Lösenord">
+        <button class="encrypt-btn" onclick="encryptText()">Kryptera</button>
+        <button class="decrypt-btn" onclick="decryptText()">Dekryptera</button>
+        <h3>Resultat:</h3>
+        <textarea id="output" readonly></textarea>
+    </div>
+    
     <script>
         function encryptText() {
-            let text = document.getElementById("textInput").value;
-            let password = document.getElementById("password").value;
+            let text = document.getElementById("textInput").value.trim();
+            let password = document.getElementById("password").value.trim();
             if (!text || !password) { alert("Fyll i både text och lösenord!"); return; }
-            let encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(text), password).toString();
+            let encrypted = CryptoJS.AES.encrypt(text, password).toString();
             document.getElementById("output").value = encrypted;
         }
 
         function decryptText() {
-            let encryptedText = document.getElementById("output").value;
-            let password = document.getElementById("password").value;
+            let encryptedText = document.getElementById("output").value.trim();
+            let password = document.getElementById("password").value.trim();
             if (!encryptedText || !password) { alert("Fyll i både krypterad text och lösenord!"); return; }
             try {
                 let bytes = CryptoJS.AES.decrypt(encryptedText, password);
@@ -40,8 +73,13 @@
                 document.getElementById("output").value = decrypted;
             } catch (e) {
                 alert("Fel lösenord eller ogiltig krypterad text!");
+                document.getElementById("output").value = "";
             }
         }
+    </script>
+</body>
+</html>
+
     </script>
 </body>
 </html>
